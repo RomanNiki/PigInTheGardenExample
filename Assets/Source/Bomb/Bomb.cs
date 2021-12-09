@@ -1,28 +1,26 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 namespace Source.Bomb
 {
-    public class Bomb : MonoBehaviour
+    public sealed class Bomb : PoolObject, IDamageable
     {
         [SerializeField] private float _attackRange;
         [SerializeField] private float _timeToExplosion;
         [SerializeField] private LayerMask _levelMask;
         [SerializeField] private PoolObject _explosion;
-        [SerializeField] private int _poolExplosionCount = 27;
+        [SerializeField] private int _poolExplosionCount = 9;
         [SerializeField] private bool _poolAutoExpand = true;
-        private ObjectPool<PoolObject> _explosionPool;
-        private const float LifeTime = 0.3f;
+        private static ObjectPool<PoolObject> _explosionPool;
 
-        private void Start()
+        private void Awake()
         {
             _explosionPool = new ObjectPool<PoolObject>(_explosion, _poolExplosionCount){AutoExpand = _poolAutoExpand};
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            Invoke(nameof(Explode), _timeToExplosion);
+            StartCoroutine(Explode(_timeToExplosion));
         }
 
         private void OnDrawGizmos()
@@ -33,21 +31,16 @@ namespace Source.Bomb
             Debug.DrawRay(transform.position, Vector2.left * _attackRange, Color.blue);
         }
 
-        private void Explode()
+        private IEnumerator Explode(float timeToExplosion)
         {
+            yield return new WaitForSeconds(timeToExplosion);
             var explosion = _explosionPool.GetFreeElement();
             explosion.transform.position = transform.position;
-            StartCoroutine(SpawnExplosion(Vector2.up));
-            StartCoroutine( SpawnExplosion(Vector2.down));
-            StartCoroutine(SpawnExplosion(Vector2.left));
-            StartCoroutine(SpawnExplosion(Vector2.right));
-            StartCoroutine(Deactivate());
-        }
-
-        private IEnumerator Deactivate()
-        {
-            yield return new WaitForSeconds(LifeTime);
-            gameObject.SetActive(false);
+            yield return SpawnExplosion(Vector2.up);
+            yield return SpawnExplosion(Vector2.down);
+            yield return SpawnExplosion(Vector2.left);
+            yield return SpawnExplosion(Vector2.right);
+            base.OnEnable();
         }
 
         private IEnumerator SpawnExplosion(Vector2 direction)
@@ -59,11 +52,10 @@ namespace Source.Bomb
                 RaycastHit2D hit =
                 Physics2D.Raycast(pos , direction, 
                     i, _levelMask);
-                Debug.Log(i);
                 if (!hit.collider)
                 {
-                    var expl = _explosionPool.GetFreeElement();
-                    expl.transform.position = transform.position + (i * (Vector3) direction);
+                    var explosion = _explosionPool.GetFreeElement();
+                    explosion.transform.position = transform.position + (i * (Vector3) direction);
                 }
                 else
                 {
@@ -73,6 +65,12 @@ namespace Source.Bomb
                 }
                 yield return new WaitForSeconds(.05f);
             }
+        }
+
+        public void GetDamage()
+        {
+            StopAllCoroutines();
+            StartCoroutine(Explode(0f));
         }
     }
 }

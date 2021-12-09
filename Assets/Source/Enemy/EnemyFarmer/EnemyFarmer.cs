@@ -73,8 +73,9 @@ namespace Source.Enemy.EnemyFarmer
         }
 
         public override void GetDamage()
-        {
-            Destroy(gameObject);
+        { 
+            _deathEvent?.Invoke();
+            gameObject.SetActive(false);
         }
     }
 }
