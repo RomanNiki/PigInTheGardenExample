@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Source.Bomb
 {
-    public sealed class Bomb : PoolObject
+    public sealed class Bomb : PoolObject, IDamageable
     {
         [SerializeField] private float _attackRange;
         [SerializeField] private float _timeToExplosion;
         [SerializeField] private LayerMask _levelMask;
         [SerializeField] private PoolObject _explosion;
-        [SerializeField] private int _poolExplosionCount = 27;
+        [SerializeField] private int _poolExplosionCount = 9;
         [SerializeField] private bool _poolAutoExpand = true;
         private static ObjectPool<PoolObject> _explosionPool;
 
@@ -20,7 +20,7 @@ namespace Source.Bomb
 
         protected override void OnEnable()
         {
-            StartCoroutine(Explode());
+            StartCoroutine(Explode(_timeToExplosion));
         }
 
         private void OnDrawGizmos()
@@ -31,9 +31,9 @@ namespace Source.Bomb
             Debug.DrawRay(transform.position, Vector2.left * _attackRange, Color.blue);
         }
 
-        private IEnumerator Explode()
+        private IEnumerator Explode(float timeToExplosion)
         {
-            yield return new WaitForSeconds(_timeToExplosion);
+            yield return new WaitForSeconds(timeToExplosion);
             var explosion = _explosionPool.GetFreeElement();
             explosion.transform.position = transform.position;
             yield return SpawnExplosion(Vector2.up);
@@ -65,6 +65,12 @@ namespace Source.Bomb
                 }
                 yield return new WaitForSeconds(.05f);
             }
+        }
+
+        public void GetDamage()
+        {
+            StopAllCoroutines();
+            StartCoroutine(Explode(0f));
         }
     }
 }
