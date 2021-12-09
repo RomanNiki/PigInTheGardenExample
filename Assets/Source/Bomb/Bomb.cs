@@ -50,7 +50,7 @@ namespace Source.Bomb
             for (int i = 1; i < range; i++)
             {
                 RaycastHit2D hit =
-                Physics2D.Raycast(pos , direction, 
+                Physics2D.CircleCast(pos , 0.2f ,direction, 
                     i, _levelMask);
                 if (!hit.collider)
                 {
