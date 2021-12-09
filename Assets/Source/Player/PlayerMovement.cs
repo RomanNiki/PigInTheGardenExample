@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Source.Player
@@ -57,7 +56,8 @@ namespace Source.Player
 
         public override void GetDamage()
         {
-            Destroy(gameObject);
+            _deathEvent?.Invoke();
+            gameObject.SetActive(false);
         }
 
         protected override void SetAnimator()

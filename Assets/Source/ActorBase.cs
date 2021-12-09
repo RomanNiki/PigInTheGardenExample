@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace Source
 {
@@ -7,6 +8,7 @@ namespace Source
     {
         [SerializeField] protected float _speed;
         [SerializeField] protected Animator _animator;
+        public UnityEvent _deathEvent;
         protected static readonly int InputMagnitude = Animator.StringToHash("Input");
         protected static readonly int Horizontal = Animator.StringToHash("Horizontal");
         protected static readonly int Vertical = Animator.StringToHash("Vertical");
