@@ -32,18 +32,15 @@ namespace Source.Player
 
         public void SetBomb()
         {
-            if (Physics2D.CircleCast(transform.position, 0.2f, Vector2.zero))
+            if (_objectPool.HasFreeElement(out var bomb))
             {
-                if (_objectPool.HasFreeElement(out var bomb))
-                {
-                    bomb.transform.position = transform.position;
-                }
-
-                if (_bombAutoExpand)
-                {
-                    var addedBomb = _objectPool.GetFreeElement();
-                    addedBomb.transform.position = transform.position;
-                }
+                bomb.transform.position = transform.position;
+            }
+            else
+            if (_bombAutoExpand)
+            {
+                var addedBomb = _objectPool.GetFreeElement();
+                addedBomb.transform.position = transform.position;
             }
         }
 
