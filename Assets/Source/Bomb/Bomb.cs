@@ -11,7 +11,9 @@ namespace Source.Bomb
         [SerializeField] private PoolObject _explosion;
         [SerializeField] private int _poolExplosionCount = 9;
         [SerializeField] private bool _poolAutoExpand = true;
+        [SerializeField] private Collider2D _bombCollider;
         private static ObjectPool<PoolObject> _explosionPool;
+        private bool _exploded;
 
         private void Awake()
         {
@@ -20,6 +22,8 @@ namespace Source.Bomb
 
         protected override void OnEnable()
         {
+            _exploded = false;
+            _bombCollider.enabled = true;
             StartCoroutine(Explode(_timeToExplosion));
         }
 
@@ -34,6 +38,8 @@ namespace Source.Bomb
         private IEnumerator Explode(float timeToExplosion)
         {
             yield return new WaitForSeconds(timeToExplosion);
+            _exploded = true;
+            _bombCollider.enabled = false;
             var explosion = _explosionPool.GetFreeElement();
             explosion.transform.position = transform.position;
             yield return SpawnExplosion(Vector2.up);
@@ -46,20 +52,19 @@ namespace Source.Bomb
         private IEnumerator SpawnExplosion(Vector2 direction)
         {
             Vector2 pos = transform.position;
-            var range = (int) _attackRange;
-            for (int i = 1; i < range; i++)
+            for (var i = 1; i < _attackRange; i++)
             {
-                RaycastHit2D hit =
+                var hit =
                 Physics2D.CircleCast(pos , 0.2f ,direction, 
                     i, _levelMask);
                 if (!hit.collider)
                 {
                     var explosion = _explosionPool.GetFreeElement();
-                    explosion.transform.position = transform.position + (i * (Vector3) direction);
+                    explosion.transform.position = pos + (i *  direction);
                 }
                 else
                 {
-                    var damageable =   hit.transform.GetComponent<IDamageable>();
+                    var damageable = hit.transform.GetComponent<IDamageable>();
                     damageable?.GetDamage();
                     break;
                 }
@@ -69,6 +74,7 @@ namespace Source.Bomb
 
         public void GetDamage()
         {
+            if (_exploded) return;
             StopAllCoroutines();
             StartCoroutine(Explode(0f));
         }

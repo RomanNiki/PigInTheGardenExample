@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2039939814494969096}
   - component: {fileID: 2039939814494969098}
   - component: {fileID: 2039939814494969099}
-  - component: {fileID: 3835911150551549340}
+  - component: {fileID: 4327623451523757742}
   m_Layer: 8
   m_Name: bomb
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2039939814494969101}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.56, y: -0.29, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -125,29 +125,20 @@ MonoBehaviour:
   _explosion: {fileID: 5229930533662891179, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
   _poolExplosionCount: 9
   _poolAutoExpand: 1
---- !u!61 &3835911150551549340
-BoxCollider2D:
+  _bombCollider: {fileID: 4327623451523757742}
+--- !u!58 &4327623451523757742
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2039939814494969101}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 3}
-    newSize: {x: 3, y: 3}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5010557, y: 0.4839983}
-  m_EdgeRadius: 0
+  m_Radius: 0.3
