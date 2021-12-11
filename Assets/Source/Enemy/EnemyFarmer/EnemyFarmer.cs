@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Source.Enemy.EnemyFarmer
@@ -12,7 +11,7 @@ namespace Source.Enemy.EnemyFarmer
         private Vector3 _input;
         private SpriteRenderer _spriteRenderer;
 
-        private Vector2[] _vector2s = new[]
+        private readonly Vector2[] _vector2S =
         {
             Vector2.up,
             Vector2.down,
@@ -44,7 +43,7 @@ namespace Source.Enemy.EnemyFarmer
         {
             for (int i = 0; i < 4; i++)
             {
-                if (Vector2.Dot(_input.normalized, _vector2s[i]) > 0.4f)
+                if (Vector2.Dot(_input.normalized, _vector2S[i]) > 0.4f)
                 {
                     _spriteRenderer.sprite = _sprites[i];
                 }
@@ -57,6 +56,7 @@ namespace Source.Enemy.EnemyFarmer
             {
                 _input = (_checkPoints[_currentCheckPoint].position -
                          transform.position).normalized * _speed * Time.deltaTime;
+                _input.z = 0;
                 transform.position += _input;
             }
             else

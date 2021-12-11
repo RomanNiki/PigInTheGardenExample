@@ -4,9 +4,8 @@ namespace Source.Player
 {
     public sealed class PlayerMovement : ActorBase
     {
-        [SerializeField] private DynamicJoystick _dynamicJoystick;
+        [SerializeField] private Joystick _joystick;
         [SerializeField] private Bomb.Bomb _bomb;
-        [SerializeField] private LayerMask _levelMask;
         [SerializeField] private int _bombCount;
         [SerializeField] private bool _bombAutoExpand;
         private float _horizontal;
@@ -66,13 +65,13 @@ namespace Source.Player
 
         private void InputHandler()
         {
-            if (_dynamicJoystick == null)
+            if (_joystick == null)
             {
                 return;
             }
             
-            _horizontal = _dynamicJoystick.Horizontal;
-            _vertical = _dynamicJoystick.Vertical;
+            _horizontal = _joystick.Horizontal;
+            _vertical = _joystick.Vertical;
             _inputMagnitude = new Vector2(_horizontal, _vertical).magnitude;
         }
     }
