@@ -29,10 +29,11 @@ namespace Source.Bomb
 
         private void OnDrawGizmos()
         {
-            Debug.DrawRay(transform.position, Vector2.up * _attackRange, Color.black);
-            Debug.DrawRay(transform.position, Vector2.right* _attackRange, Color.green);
-            Debug.DrawRay(transform.position, Vector2.down * _attackRange, Color.red);
-            Debug.DrawRay(transform.position, Vector2.left * _attackRange, Color.blue);
+            var position = transform.position;
+            Debug.DrawRay(position, Vector2.up * _attackRange, Color.black);
+            Debug.DrawRay(position, Vector2.right* _attackRange, Color.green);
+            Debug.DrawRay(position, Vector2.down * _attackRange, Color.red);
+            Debug.DrawRay(position, Vector2.left * _attackRange, Color.blue);
         }
 
         private IEnumerator Explode(float timeToExplosion)
