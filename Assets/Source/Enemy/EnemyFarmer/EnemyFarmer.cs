@@ -1,3 +1,5 @@
+using Source.Enemy.MovementTypes;
+using Source.Interfaces;
 using UnityEngine;
 
 namespace Source.Enemy.EnemyFarmer
@@ -7,8 +9,8 @@ namespace Source.Enemy.EnemyFarmer
     {
         [SerializeField] private Transform[] _checkPoints;
         [SerializeField] private Sprite[] _sprites;
-        private int _currentCheckPoint;
-        private Vector3 _input;
+        private IMove _enemyMovement;
+        private Vector3 _inputDirection;
         private SpriteRenderer _spriteRenderer;
 
         private readonly Vector2[] _vector2S =
@@ -18,14 +20,11 @@ namespace Source.Enemy.EnemyFarmer
             Vector2.left,
             Vector2.right
         };
+        
         private void Awake()
         {
+            _enemyMovement = new MoveToCheckPoints(_speed, _checkPoints, transform);
             _spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-
-        protected override void SetAnimator()
-        {
-           _animator.SetFloat(InputMagnitude, _input.normalized.magnitude);
         }
 
         private void Update()
@@ -43,35 +42,23 @@ namespace Source.Enemy.EnemyFarmer
         {
             for (int i = 0; i < 4; i++)
             {
-                if (Vector2.Dot(_input.normalized, _vector2S[i]) > 0.4f)
+                if (Vector2.Dot(_inputDirection.normalized, _vector2S[i]) > 0.4f)
                 {
                     _spriteRenderer.sprite = _sprites[i];
                 }
             }
         }
+        
+        protected override void SetAnimator()
+        {
+            _animator.SetFloat(InputMagnitude, _inputDirection.normalized.magnitude);
+        }
 
         protected override void Move()
         {
-            if (((Vector2)_checkPoints[_currentCheckPoint].position - (Vector2)transform.position).magnitude > 0.1f)
-            {
-                _input = (_checkPoints[_currentCheckPoint].position -
-                         transform.position).normalized * _speed * Time.deltaTime;
-                _input.z = 0;
-                transform.position += _input;
-            }
-            else
-            {
-                if (_currentCheckPoint < _checkPoints.Length - 1)
-                {
-                    _currentCheckPoint++;
-                }
-                else
-                {
-                    _currentCheckPoint = 0;
-                }
-            }
+            _inputDirection = _enemyMovement.Move();
         }
-
+        
         public override void GetDamage()
         { 
             _deathEvent?.Invoke();

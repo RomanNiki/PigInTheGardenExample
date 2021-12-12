@@ -1,4 +1,4 @@
-﻿namespace Source
+﻿namespace Source.Interfaces
 {
     public interface IDamageable
     {
