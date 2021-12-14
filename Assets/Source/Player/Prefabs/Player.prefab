@@ -345,7 +345,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 1
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -527,8 +527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 764f38b93432f554e8860ff4fba843ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
   _animator: {fileID: 0}
+  _speed: 3
   _deathEvent:
     m_PersistentCalls:
       m_Calls:
@@ -757,7 +757,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 1
+    m_FontSize: 12
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1

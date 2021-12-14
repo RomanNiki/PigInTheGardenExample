@@ -5,26 +5,15 @@ using UnityEngine;
 namespace Source.Enemy.EnemyFarmer
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class EnemyFarmer : ActorBase
+    public class EnemyFarmer : EnemyBase
     {
         [SerializeField] private Transform[] _checkPoints;
-        [SerializeField] private Sprite[] _sprites;
         private IMove _enemyMovement;
         private Vector3 _inputDirection;
-        private SpriteRenderer _spriteRenderer;
 
-        private readonly Vector2[] _vector2S =
-        {
-            Vector2.up,
-            Vector2.down,
-            Vector2.left,
-            Vector2.right
-        };
-        
         private void Awake()
         {
             _enemyMovement = new MoveToCheckPoints(_speed, _checkPoints, transform);
-            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void Update()
@@ -35,23 +24,13 @@ namespace Source.Enemy.EnemyFarmer
         private void FixedUpdate()
         {
             Move();
-            RotateCharacter();
         }
 
-        private void RotateCharacter()
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (Vector2.Dot(_inputDirection.normalized, _vector2S[i]) > 0.4f)
-                {
-                    _spriteRenderer.sprite = _sprites[i];
-                }
-            }
-        }
-        
         protected override void SetAnimator()
         {
             _animator.SetFloat(InputMagnitude, _inputDirection.normalized.magnitude);
+            _animator.SetFloat(Horizontal, _inputDirection.normalized.x);
+            _animator.SetFloat(Vertical, _inputDirection.normalized.y);
         }
 
         protected override void Move()
