@@ -3456,6 +3456,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7051410846321881424, guid: 109dfcc2b1740334abee47a6d1fc8b2e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -284627385986098231, guid: e6fde105e1bef244aab5e339c75483ae, type: 3}
     - target: {fileID: 7051410846321881427, guid: 109dfcc2b1740334abee47a6d1fc8b2e, type: 3}
       propertyPath: _checkPoints.Array.data[0]
       value: 
