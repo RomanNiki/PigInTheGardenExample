@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Source
+namespace Source.Enemy
 {
-    public abstract class ActorBase : AnimatedBase, IDamageable
+    public abstract class EnemyBase : AnimatedBase, IDamageable
     {
         [SerializeField] protected float _speed;
         public UnityEvent _deathEvent;

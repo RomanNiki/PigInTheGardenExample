@@ -1,4 +1,5 @@
 using System.Collections;
+using Source.Interfaces;
 using UnityEngine;
 
 namespace Source.Bomb
@@ -13,7 +14,7 @@ namespace Source.Bomb
         [SerializeField] private bool _poolAutoExpand = true;
         [SerializeField] private Collider2D _bombCollider;
         private static ObjectPool<PoolObject> _explosionPool;
-        private bool _exploded;
+        private bool Exploded => !_bombCollider.enabled;
 
         private void Awake()
         {
@@ -22,7 +23,6 @@ namespace Source.Bomb
 
         protected override void OnEnable()
         {
-            _exploded = false;
             _bombCollider.enabled = true;
             StartCoroutine(Explode(_timeToExplosion));
         }
@@ -39,7 +39,6 @@ namespace Source.Bomb
         private IEnumerator Explode(float timeToExplosion)
         {
             yield return new WaitForSeconds(timeToExplosion);
-            _exploded = true;
             _bombCollider.enabled = false;
             var explosion = _explosionPool.GetFreeElement();
             explosion.transform.position = transform.position;
@@ -75,7 +74,7 @@ namespace Source.Bomb
 
         public void GetDamage()
         {
-            if (_exploded) return;
+            if (Exploded) return;
             StopAllCoroutines();
             StartCoroutine(Explode(0f));
         }
