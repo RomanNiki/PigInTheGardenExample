@@ -15,22 +15,12 @@ namespace Source.Enemy.EnemyFarmer
         {
             _enemyMovement = new MoveToCheckPoints(_speed, _checkPoints, transform);
         }
-
-        private void Update()
-        {
-            SetAnimator();
-        }
-
-        private void FixedUpdate()
-        {
-            Move();
-        }
-
+        
         protected override void SetAnimator()
         {
-            _animator.SetFloat(InputMagnitude, _inputDirection.normalized.magnitude);
-            _animator.SetFloat(Horizontal, _inputDirection.normalized.x);
-            _animator.SetFloat(Vertical, _inputDirection.normalized.y);
+            _animator.SetFloat(Params.InputMagnitude, _inputDirection.normalized.magnitude);
+            _animator.SetFloat(Params.Horizontal, _inputDirection.normalized.x);
+            _animator.SetFloat(Params.Vertical, _inputDirection.normalized.y);
         }
 
         protected override void Move()

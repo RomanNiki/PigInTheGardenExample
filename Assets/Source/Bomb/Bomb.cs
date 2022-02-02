@@ -13,6 +13,7 @@ namespace Source.Bomb
         [SerializeField] private int _poolExplosionCount = 9;
         [SerializeField] private bool _poolAutoExpand = true;
         [SerializeField] private Collider2D _bombCollider;
+        [SerializeField] private float _verticalDisplacement = 0.11f ;
         private static ObjectPool<PoolObject> _explosionPool;
         private bool Exploded => !_bombCollider.enabled;
 
@@ -30,9 +31,9 @@ namespace Source.Bomb
         private void OnDrawGizmos()
         {
             var position = transform.position;
-            Debug.DrawRay(position, Vector2.up * _attackRange, Color.black);
+            Debug.DrawRay(position, new Vector2(_verticalDisplacement, Vector2.up.y * _attackRange), Color.black);
             Debug.DrawRay(position, Vector2.right* _attackRange, Color.green);
-            Debug.DrawRay(position, Vector2.down * _attackRange, Color.red);
+            Debug.DrawRay(position, new Vector2(-_verticalDisplacement, Vector2.down.y * _attackRange), Color.red);
             Debug.DrawRay(position, Vector2.left * _attackRange, Color.blue);
         }
 
@@ -42,8 +43,8 @@ namespace Source.Bomb
             _bombCollider.enabled = false;
             var explosion = _explosionPool.GetFreeElement();
             explosion.transform.position = transform.position;
-            yield return SpawnExplosion(Vector2.up);
-            yield return SpawnExplosion(Vector2.down);
+            yield return SpawnExplosion(new Vector2(_verticalDisplacement, Vector2.up.y));
+            yield return SpawnExplosion(new Vector2(-_verticalDisplacement, Vector2.down.y));
             yield return SpawnExplosion(Vector2.left);
             yield return SpawnExplosion(Vector2.right);
             base.OnEnable();

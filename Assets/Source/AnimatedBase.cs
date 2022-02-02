@@ -6,15 +6,26 @@ namespace Source
     public abstract class AnimatedBase : MonoBehaviour
     {
         [SerializeField] protected Animator _animator;
-        protected static readonly int InputMagnitude = Animator.StringToHash("Input");
-        protected static readonly int Horizontal = Animator.StringToHash("Horizontal");
-        protected static readonly int Vertical = Animator.StringToHash("Vertical");
+        public static class Params
+        {
+            public static readonly int InputMagnitude = Animator.StringToHash("Input");
+            public static readonly int Horizontal = Animator.StringToHash("Horizontal");
+            public static readonly int Vertical = Animator.StringToHash("Vertical");
+        }
+        
+        private float _normValue;
         
         protected abstract void SetAnimator();
         
         protected virtual void Start()
         {
             _animator = GetComponent<Animator>();
+        }
+
+        protected virtual void Update()
+        {
+            SetAnimator();
+            _normValue = _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
     }
 }

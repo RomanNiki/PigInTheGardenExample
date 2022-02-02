@@ -126,6 +126,7 @@ MonoBehaviour:
   _poolExplosionCount: 9
   _poolAutoExpand: 1
   _bombCollider: {fileID: 4327623451523757742}
+  _verticalDisplacement: 0.11
 --- !u!58 &4327623451523757742
 CircleCollider2D:
   m_ObjectHideFlags: 0

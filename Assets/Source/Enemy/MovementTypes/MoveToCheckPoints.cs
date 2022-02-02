@@ -1,4 +1,5 @@
-﻿using Source.Interfaces;
+﻿using System.Collections.Generic;
+using Source.Interfaces;
 using UnityEngine;
 
 namespace Source.Enemy.MovementTypes
@@ -6,30 +7,30 @@ namespace Source.Enemy.MovementTypes
     public class MoveToCheckPoints : IMove
     {
         private readonly Transform _transform;
-        public Transform[] CheckPoints { get; set; }
+        private List<Transform> _checkPoints;
         public float _speed { get; set; }
         private Vector3 _inputDirection;
         private int _currentCheckPoint;
 
-        public MoveToCheckPoints(float speed, Transform[] checkPoints, Transform transform)
+        public MoveToCheckPoints(float speed, IEnumerable<Transform> checkPoints, Transform transform)
         {
             _speed = speed;
-            CheckPoints = checkPoints;
+            _checkPoints = new List<Transform>(checkPoints);
             _transform = transform;
         }
 
         public Vector2 Move()
         {
-            if (((Vector2) CheckPoints[_currentCheckPoint].position - (Vector2) _transform.position).magnitude > 0.1f)
+            if (((Vector2) _checkPoints[_currentCheckPoint].position - (Vector2) _transform.position).magnitude > 0.1f)
             {
-                _inputDirection = (CheckPoints[_currentCheckPoint].position -
+                _inputDirection = (_checkPoints[_currentCheckPoint].position -
                                    _transform.position).normalized * _speed * Time.deltaTime;
                 _inputDirection.z = 0;
                 _transform.position += _inputDirection;
             }
             else
             {
-                if (_currentCheckPoint < CheckPoints.Length - 1)
+                if (_currentCheckPoint < _checkPoints.Count - 1)
                 {
                     _currentCheckPoint++;
                 }
@@ -40,6 +41,21 @@ namespace Source.Enemy.MovementTypes
             }
 
             return _inputDirection;
+        }
+
+        public void AddCheckPoint(Transform checkPoint)
+        {
+            _checkPoints.Add(checkPoint);
+        }
+
+        public void RemoveCheckPoint(Transform checkPoint)
+        {
+            _checkPoints.Remove(checkPoint);
+        }
+        
+        public void RemoveCheckPoint(int checkPointId)
+        {
+            _checkPoints.Remove(_checkPoints[checkPointId]);
         }
         
     }

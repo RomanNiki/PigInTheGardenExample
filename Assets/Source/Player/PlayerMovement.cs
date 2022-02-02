@@ -18,15 +18,16 @@ namespace Source.Player
             base.Start();
             _objectPool = new ObjectPool<Bomb.Bomb>(_bomb, _bombCount){AutoExpand = _bombAutoExpand};
         }
-
-        private void Update()
-        {
-            Move();
-        }
-
+        
         private void OnDrawGizmos()
         {
             Gizmos.DrawWireSphere(transform.position, 0.2f);
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            InputHandler();
         }
 
         public void SetBomb()
@@ -45,8 +46,6 @@ namespace Source.Player
 
         protected override void Move()
         {
-            InputHandler();
-            SetAnimator();
             transform.position += new Vector3(_horizontal, _vertical, 0f) * _speed * Time.deltaTime;
         }
 
@@ -58,9 +57,9 @@ namespace Source.Player
 
         protected override void SetAnimator()
         {
-            _animator.SetFloat(InputMagnitude, _inputMagnitude);
-            _animator.SetFloat(Horizontal, _horizontal);
-            _animator.SetFloat(Vertical, _vertical);
+            _animator.SetFloat(Params.InputMagnitude, _inputMagnitude);
+            _animator.SetFloat(Params.Horizontal, _horizontal);
+            _animator.SetFloat(Params.Vertical, _vertical);
         }
 
         private void InputHandler()
